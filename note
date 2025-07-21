@@ -1,0 +1,48 @@
+heap memory : for dynamic memory allocation
+size of pointer in 32bit arch in 4 and 64 bit in 8 bits
+bit shiffting :
+>> shift right
+<< shit left
+& AND operation
+| OR operateur
+ >> shift right operator
+ << shit left operator
+ 0b0001 -> a base 2 nit
+ 0xC -> hexadicimal
+ 0o8 -> octal
+ 1 1
+ 1 0 1 0
+ 0 0 0 1
+ TRNG - m!wq
+
+
+Reverse engenering basic
+------------------
+Path
+Windows 10/11
+Assembly (basics) (mid)
+C (Coding) (Reverse mahich mouhema barcha)
+Windows Internals (WIN 32 API) (Mouhema 3ale5er)
+PE File executable
+Patcher(DLL injector);
+Cryptographie (AES,DES,)
+------------------
+Ports (Logique) 
+xor eax,eax -> fara5 register
+tools (xdbg | ghidra | CFF explorer | EXEinfo | detected easy)
+retools (redtools)
+
+Malware Developpement:
+Jack of all trades (C,C++,python,Golan,rust,shell,perl)
+networking (minimum)
+Sigploit
+
+with malloc use free 
+with dynamic pointers use c++ delete
+
+--> it has to be surprising think of a plot
+--> good app
+--> element of surprise
+
+
+

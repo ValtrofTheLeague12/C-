@@ -1,0 +1,41 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+class Friend{
+private:
+std::string name;
+std::string lastname;
+public:
+Friend(std::string n,std::string m){
+name = n;
+lastname = m;
+}
+std::string getname(){
+return this->name;
+}
+void setname(std::string sn){
+this->name  = sn;
+}
+//concat name;
+Friend  operator+(const Friend& m){
+	char* buffer = (char*) malloc(sizeof(char) * (m.name.length() +  this->name.length()) + 1);
+	if(buffer ==  nullptr){
+	throw std::runtime_error("error allocation failed please try again");
+	}
+	char* name1 = (char*) malloc(sizeof(char) * m.name.length());
+	name1[0] = "\0";
+	strcpy(name1,m.name.data());
+	char* other_name = (char*) malloc(sizeof(char) * this->name.length());
+	other_name[0] = "\0";
+	strcpy(other_name,this->name.data());
+	sprintf(buffer,"%s %s",name,other_name); 
+	return Friend(buffer,"haha");
+}
+};
+int main(void){
+Friend f("Yassine","Loussaief");
+Friend G("Yassuo","GG");
+Friend Results = f + G;
+std::cout << Results.getname() << std::endl;
+return EXIT_SUCCESS;
+}
