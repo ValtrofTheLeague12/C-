@@ -16,6 +16,7 @@
 #define GOOGLE_DNS "8.8.8.8"
 #define UNALLOWED "(PERMISSION : 0)"
 bool find_ip(char* ip);
+void verify_if_online();
 void terminal();
 enum CLASS{
 A = 1,
@@ -425,9 +426,11 @@ try{
 	 std::cout << "4 . Recover ip addresses List" << std::endl;
 	 std::cout << "5 . Ping All Allowed Ips" << std::endl;
 	 std::cout << "6 . Delete IP File " << std::endl;
-         std::cout << "7 . Exit terminal " << std::endl;
+	 std::cout << "7 . Check if you are Online" << std::endl;
+         std::cout << "8 . Exit terminal " << std::endl;
 	 // to be createdstd::cout << "8 . socket creator : " << std::endl;  
 	 std::cin >> jeff;
+	 std::cout << "Your choice : " << jeff << std::endl;
 	 switch(stoi(jeff)){
 	      case 2:{
 			std::string ip;
@@ -558,8 +561,13 @@ try{
 			sleep(1);
 			delete_all_content();
 			break;
-		     }   
-	      case 7: {
+		     }
+	     case 7:{
+                          std::cout << "Checking if you are online" << std::endl;
+			  sleep(1);
+			  verify_if_online();
+		    }   
+	      case 8: {
                          std::cout << "Exiting Terminal" << std::endl; 
 			 std::exit(0);
 
@@ -569,34 +577,51 @@ try{
    std::cin.clear();
    }
 }catch(std::exception& e){
+ std::cout << e.what()  << std::endl;
  std::cout << "Please enter a valid choice !!! " << std::endl;
  terminal();
 } 
 }
 int find_free_port(){
 	std::random_device rd;
-	std::uniform_int_distrobution<int> random()
+	std::uniform_int_distribution<int> random(0,30);
 } 
-void verify_if_online(){
-	socket sock = socket(IA_INET,SOCK_STREAM,0);
-	if(sock < 0){
-            throw std::runtime_error("error socket failed to initialize");
+void verify_if_online(){ // needs to be worked on 
+	char* buffer = (char*) malloc(sizeof(char) * MAX_BUFFER);
+	if(buffer == nullptr){
+           throw std::runtime_error("memory allocation failed please try again !!! ");
 	}
-	/*
-	sockaddr_in serverAddress;
-	memset(&serverAddress,0,sizeof(serverAddress));
-	serverAddress.sin_port = htons(8080);
-        serverAddress.sin_family = AF_INET;
-	if(inet_pton(AF_INET,GOOGLE_DNS,&serverAddress.sin_addr) < 0){
-             throw std::runtime_error("ip address given is not supported");
+	strcpy(buffer,"ping 8.8.8.8 -c 3");
+        char* temp_buffer = (char*) realloc(buffer,sizeof(char) * strlen(buffer));
+        if(temp_buffer == nullptr){
+            throw std::runtime_error("reallocation failed pls try again !!!");
 	}
-        if(connect(sock,(sockaddr*)&severAddress,sizeof(serverAddress)) == -1){
-            std::cout << "YOUR ARE OFFLINE [CONNECTION TO GOOGLE DNS FAILED]" << std::endl;
-	}else{
-            std::cout  << "YOUR ARE ONLINE [CONNECTION TO GOOGLE DNS" << std::endl;
-     }
-     */
-}	
+        buffer = temp_buffer;
+	FILE* pipe = popen(buffer,"r");
+	if(pipe == nullptr){
+          pclose(pipe);
+	  throw std::runtime_error("Pipe Failed to open...");
+	}
+	char* stored_data = (char*) malloc(sizeof(char) * MAX_BUFFER);
+	if(stored_data == nullptr){
+           throw std::runtime_error("please verify you input");
+	} 
+	while(fgets(stored_data,MAX_BUFFER,pipe)){
+               std::cout << stored_data << std::endl;
+	}
+	const char* error_message = "ping: connect: Network is unreachable";
+	int comp = strcmp(stored_data,error_message);
+	std::cout << "Comparison " << comp << std::endl;
+}
+	
+
+	
+          
+    // 1 . open a pipe for comunication between ping -c command and the used executable
+    // 2
+    //
+	
+
 
        	//IPV4
  //watching jack stauber networking programming
@@ -607,13 +632,14 @@ void verify_if_online(){
  if(sock < 0){
         throw std::runtime_error("sock failed to intisialize");
  }
+
  sockaddr server; 
  server.port_in = htons(8080);
 	// to do tommorrow we will learn how to send http reque
 	///sts using sockets
  // best practices to deal with argv params
  */
-} 
+ 
 void terminal_with_params(char* argv[]){
  if(strlen(argv[0]) == 0){
          std::cout << "no params specified !!!" << std::endl;

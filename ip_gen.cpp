@@ -414,6 +414,7 @@ void generateIpAddress(enum CLASS type,bool ping_addr){
 	    free(buffer);
 	    free(R);   
 }
+// we need ideas to work on 
 void terminal(){
 try{
    std::string jeff;
@@ -591,25 +592,52 @@ void verify_if_online(){ // needs to be worked on
 	if(buffer == nullptr){
            throw std::runtime_error("memory allocation failed please try again !!! ");
 	}
-	strcpy(buffer,"ping 8.8.8.8 -c 3");
+	strcpy(buffer,"ping 8.8.8.8 -c 1");
         char* temp_buffer = (char*) realloc(buffer,sizeof(char) * strlen(buffer));
         if(temp_buffer == nullptr){
             throw std::runtime_error("reallocation failed pls try again !!!");
 	}
         buffer = temp_buffer;
-	int pipe = popen(buffer,"r");
+	FILE* pipe = popen(buffer,"r");
 	if(pipe == nullptr){
           pclose(pipe);
 	  throw std::runtime_error("Pipe Failed to open...");
 	}
-	char c;
-	while(read(pipe,&c,1) > 0){
-          std::cout << c << std::endl;
-	} 
+	char* stored_data = (char*) malloc(sizeof(char) * MAX_BUFFER);
+	if(stored_data == nullptr){
+           throw std::runtime_error("please verify you input");
+	}
+          int c = 0;	
+	while(fgets(stored_data,MAX_BUFFER,pipe)){
+	   c++;
+	}
+	std::cout << "\n" << std::endl;
+	// if there is an error in the pipeline the length of the stored_buffer = 0
+	if(strlen(stored_data) == 0){
+                std::cout << "YOU ARE OFFLINE [CONNECTION TO GOOGLE.COM HAS FAILED]";
+		buffer = nullptr;
+		stored_data = nullptr;
+		free(buffer);
+		free(stored_data);
+		pclose(pipe);
+	}else{
+              std::cout << "YOU ARE ONLINE [CONNNECTION TO GOOGLE.COM HAS BEEN SUCCESSFULLY MADE]" << std::endl;
+	      buffer = nullptr;
+	      stored_data = nullptr;
+	      free(buffer);
+	      free(stored_data);
+	      pclose(pipe);
+	}
+	terminal();
+}
+	
+
+	
+          
     // 1 . open a pipe for comunication between ping -c command and the used executable
     // 2
     //
-}	
+	
 
 
        	//IPV4
@@ -688,8 +716,7 @@ void terminal_with_params(char* argv[]){
 	 terminal();
 	 //terminal_with_params(argv);
 
-// terminal ping 1.1.1.1.1	
-                         	
+// terminal ping 1.1.1.1.1	               	
 	/*
 	enum CLASS cs = A;
 	enum PERMISSION B = ALLOW_PING;
