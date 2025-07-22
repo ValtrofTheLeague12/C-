@@ -25,7 +25,7 @@ if(inet_pton(AF_INET,"127.0.0.1",&server.sin_addr) < 0){
          std::cerr << "Connection failed Unsportedd address " << std::endl;
 }
 // Connect to client server through socket with port 8080 and Addr 127.0.0.1 loopback
-if(connect(clientSocket,(struct sockaddr*)& server,sizeof(server)) < 0){
+if(connect(clientSocket,(struct sockaddr*)&server,sizeof(server)) < 0){
 	std::cerr << "Connection failed" << std::endl;
 }
 char* buffer =(char*) malloc(sizeof(char) * 1024);

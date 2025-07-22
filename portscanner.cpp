@@ -21,8 +21,7 @@ int soc = socket(AF_INET,SOCK_STREAM,0); // TCP IP socket
 if(soc == -1){ // means socket failed to be created -1  
 	throw std::runtime_error("Opening socket failed !!!");
 }
-sockaddr_in server = {
-AF_INET,
+sockaddr_in server = {AF_INET,
 htons(port),
 INADDR_ANY // 127.0.0.1 addr	
 };

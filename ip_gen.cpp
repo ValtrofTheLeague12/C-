@@ -1,4 +1,5 @@
 #include <iostream>
+#include <arpa/inet.h>
 #include <fstream>
 #include <cstring>
 #include <random>
@@ -12,8 +13,10 @@
 #define LOG_FILE "Logs.log"
 #define IP_FILE "ip.txt"
 #define ALLOWED  "(PERMISSION : 1)"
+#define GOOGLE_DNS "8.8.8.8"
 #define UNALLOWED "(PERMISSION : 0)"
 bool find_ip(char* ip);
+void verify_if_online();
 void terminal();
 enum CLASS{
 A = 1,
@@ -423,9 +426,11 @@ try{
 	 std::cout << "4 . Recover ip addresses List" << std::endl;
 	 std::cout << "5 . Ping All Allowed Ips" << std::endl;
 	 std::cout << "6 . Delete IP File " << std::endl;
-         std::cout << "7 . Exit terminal " << std::endl;
+	 std::cout << "7 . Check if you are Online" << std::endl;
+         std::cout << "8 . Exit terminal " << std::endl;
 	 // to be createdstd::cout << "8 . socket creator : " << std::endl;  
 	 std::cin >> jeff;
+	 std::cout << "Your choice : " << jeff << std::endl;
 	 switch(stoi(jeff)){
 	      case 2:{
 			std::string ip;
@@ -556,8 +561,13 @@ try{
 			sleep(1);
 			delete_all_content();
 			break;
-		     }   
-	      case 7: {
+		     }
+	     case 7:{
+                          std::cout << "Checking if you are online" << std::endl;
+			  sleep(1);
+			  verify_if_online();
+		    }   
+	      case 8: {
                          std::cout << "Exiting Terminal" << std::endl; 
 			 std::exit(0);
 
@@ -567,11 +577,42 @@ try{
    std::cin.clear();
    }
 }catch(std::exception& e){
+ std::cout << e.what()  << std::endl;
  std::cout << "Please enter a valid choice !!! " << std::endl;
  terminal();
 } 
 }
-bool verify_if_online(){
+int find_free_port(){
+	std::random_device rd;
+	std::uniform_int_distribution<int> random(0,30);
+} 
+void verify_if_online(){ // needs to be worked on 
+	char* buffer = (char*) malloc(sizeof(char) * MAX_BUFFER);
+	if(buffer == nullptr){
+           throw std::runtime_error("memory allocation failed please try again !!! ");
+	}
+	strcpy(buffer,"ping 8.8.8.8 -c 3");
+        char* temp_buffer = (char*) realloc(buffer,sizeof(char) * strlen(buffer));
+        if(temp_buffer == nullptr){
+            throw std::runtime_error("reallocation failed pls try again !!!");
+	}
+        buffer = temp_buffer;
+	int pipe = popen(buffer,"r");
+	if(pipe == nullptr){
+          pclose(pipe);
+	  throw std::runtime_error("Pipe Failed to open...");
+	}
+	char c;
+	while(read(pipe,&c,1) > 0){
+          std::cout << c << std::endl;
+	} 
+    // 1 . open a pipe for comunication between ping -c command and the used executable
+    // 2
+    //
+}	
+
+
+       	//IPV4
  //watching jack stauber networking programming
  // understand socket programming !!! 
  // dont copy code just try to understand it and learn networking with it
@@ -580,13 +621,14 @@ bool verify_if_online(){
  if(sock < 0){
         throw std::runtime_error("sock failed to intisialize");
  }
+
  sockaddr server; 
  server.port_in = htons(8080);
 	// to do tommorrow we will learn how to send http reque
 	///sts using sockets
  // best practices to deal with argv params
  */
-} 
+ 
 void terminal_with_params(char* argv[]){
  if(strlen(argv[0]) == 0){
          std::cout << "no params specified !!!" << std::endl;
